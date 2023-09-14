@@ -7,16 +7,19 @@ import jstyleson as json
 from pprint import pprint
 if __name__ == "__main__":
     cwd = os.getcwd()
-    torchrun = False
+    LAUNCH_FLAG = "python"
     if "python" in sys.argv:
         python_idx = sys.argv.index("python")
     elif "python3" in sys.argv:
         python_idx = sys.argv.index("python3")
     elif "torchrun" in sys.argv:
         python_idx = sys.argv.index("torchrun")
-        torchrun = True
+        LAUNCH_FLAG = "torchrun"
+    elif "accelerate" in sys.argv:
+        python_idx = sys.argv.index("accelerate")
+        LAUNCH_FLAG = "accelerate"
     else: 
-        print("Can't find python or python3 or torchrun in your command")
+        print("Can't find python or python3 or torchrun or accelerate in your command")
         
 
     envs = sys.argv[1:python_idx]
@@ -24,10 +27,15 @@ if __name__ == "__main__":
     for env in envs:
         key, value = env.split("=")
         env_dict[key] = value
-    if torchrun:
+    if LAUNCH_FLAG == "torchrun":
         import subprocess
         # 使用 subprocess 执行命令，并捕获其输出
         file_ = subprocess.check_output(["which", "torchrun"], universal_newlines=True)[:-1]
+        args = sys.argv[python_idx + 1:]
+    elif LAUNCH_FLAG == "accelerate":
+        import subprocess
+        # 使用 subprocess 执行命令，并捕获其输出
+        file_ = subprocess.check_output(["which", "accelerate"], universal_newlines=True)[:-1]
         args = sys.argv[python_idx + 1:]
     else:
         file_ = sys.argv[python_idx + 1]
@@ -41,7 +49,7 @@ if __name__ == "__main__":
         }
 
     config = {
-        "name": f"torchrun: {' '.join(sys.argv[1:])}" if torchrun else f"Python: {' '.join(sys.argv[1:])}",
+        "name": f"{LAUNCH_FLAG}: {' '.join(sys.argv[1:])}",
         "type": "python",
         "request": "launch",
         "program": f"{file_}",

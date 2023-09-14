@@ -18,6 +18,8 @@ It will parse the environment variables and the arguments list correctly.
 For example:
 ```shell
 zpdb CUDA_VISIBLE_DEVICES=1,2 python train.py --batch-size 16 --lr 1e-4
+zpdb CUDA_VISIBLE_DEVICES=1,2 accelerate lauch train.py --batch-size 16 --lr 1e-4
+zpdb CUDA_VISIBLE_DEVICES=1,2 torchrun --nnodes=1 --nproc_per_node=2 train.py --config ./configs/7B_sft.py --launcher "torch"
 ```
 
 It will generate the debug configuration in `.vscode/launch.json`. 
@@ -51,4 +53,4 @@ Then you can debug your python file by clicking the corresponding button.
 
 
 1. This repo based on vpdb:https://github.com/silverbulletmdc/vpdb
-2. Support torchrun
+2. Support torchrun and accelerate
