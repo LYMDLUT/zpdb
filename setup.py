@@ -3,7 +3,7 @@ import glob
 
 setup(
     name="zpdb",
-    version="1.0.2",
+    version="1.0.3",
     author="YiMing Liu",
     author_email="letusgo126@126.com",
     url="https://github.com/LYMDLUT/zpdb",
